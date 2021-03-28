@@ -11,12 +11,12 @@ import smtplib
 import json
 
 def get_sub_dataset_name(dataset_name, path):
-    splits = path.split("/")
+    # splits = path.split("/")
     if dataset_name == "Office31":
-        return splits[-2]
+        return path.parent.stem
     elif dataset_name == "ImageClef":
-        return splits[-1]
-    return splits[-2]
+        return path.stem
+    return path.parent.stem
 
 # def get_config_var():
 #     load_dotenv()
