@@ -1,7 +1,9 @@
 import os
+from pathlib import Path
+
 from experiments.sacred_utils import custom_json_dumper, is_host_livia
-from utils import get_config_var
-vars = get_config_var()
+# from utils import get_config_var
+# vars = get_config_var()
 
 from sacred import Experiment
 ex = Experiment()
@@ -18,7 +20,7 @@ import DA.DA_datasets as DA_datasets
 import torch.nn as nn
 import torch.nn.functional as F
 import cmodels.DANN_GRL as DANN_GRL
-from utils import LoggerForSacred, send_email, get_sub_dataset_name
+from utils import LoggerForSacred, get_sub_dataset_name
 
 @ex.config
 def exp_config():
@@ -135,24 +137,24 @@ def run_exp():
 
 if __name__ == "__main__":
 
-    if os.name != 'nt':
-        a = os.path.expanduser('~/datasets/amazon/images')
-        w = os.path.expanduser('~/datasets/webcam/images')
-        d = os.path.expanduser('~/datasets/dslr/images')
+    data_path = Path("/home/hossein/Desktop/dataset/mtda")
+    a = data_path / "domain_adaptation_images/amazon/images"
+    w = data_path / "domain_adaptation_images/webcam/images"
+    d = data_path / "domain_adaptation_images/dslr/images"
 
-        Ar = os.path.expanduser('~/datasets/OfficeHome/Art')
-        Cl = os.path.expanduser('~/datasets/OfficeHome/Clipart')
-        Pr = os.path.expanduser('~/datasets/OfficeHome/Product')
-        Rw = os.path.expanduser('~/datasets/OfficeHome/RealWorld')
+    Ar = data_path / 'OfficeHomeDataset_10072016/Art'
+    Cl = data_path / 'OfficeHomeDataset_10072016/Clipart'
+    Pr = data_path / 'OfficeHomeDataset_10072016/Product'
+    Rw = data_path / 'OfficeHomeDataset_10072016/Real World'
 
-        i = os.path.expanduser('~/datasets/image-clef/i')
-        p = os.path.expanduser('~/datasets/image-clef/p')
-        c = os.path.expanduser('~/datasets/image-clef/c')
-
-        p_ar = os.path.expanduser('~/datasets/pacs/art_painting')
-        p_c = os.path.expanduser('~/datasets/pacs/cartoon')
-        p_p = os.path.expanduser('~/datasets/pacs/photo')
-        p_s = os.path.expanduser('~/datasets/pacs/sketch')
+    # i = os.path.expanduser('~/datasets/image-clef/i')
+    # p = os.path.expanduser('~/datasets/image-clef/p')
+    # c = os.path.expanduser('~/datasets/image-clef/c')
+    #
+    # p_ar = os.path.expanduser('~/datasets/pacs/art_painting')
+    # p_c = os.path.expanduser('~/datasets/pacs/cartoon')
+    # p_p = os.path.expanduser('~/datasets/pacs/photo')
+    # p_s = os.path.expanduser('~/datasets/pacs/sketch')
 
     mt = "MNIST"
     mm = "MNIST-M"

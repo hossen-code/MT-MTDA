@@ -1,9 +1,11 @@
+from pathlib import Path
+
 import torch
 import torch.nn.functional as F
 import torchvision
 from torchvision import transforms
 import cmodels.mnist_net
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 import os
 import smtplib
 import json
@@ -16,43 +18,42 @@ def get_sub_dataset_name(dataset_name, path):
         return splits[-1]
     return splits[-2]
 
-def get_config_var():
-    load_dotenv()
-    vars = {}
-    vars["SACRED_URL"] = os.getenv("SACRED_URL")
-    vars["SACRED_DB"] = os.getenv("SACRED_DB")
-    vars["VISDOM_PORT"] = os.getenv("VISDOM_PORT")
-    vars["SAVE_DIR"] = os.getenv("SAVE_DIR")
-    vars["GMAIL_USER"] = os.getenv("GMAIL_USER")
-    vars["GMAIL_PASSWORD"] = os.getenv("GMAIL_PASSWORD")
-    vars["TO_EMAIL"] = os.getenv("TO_EMAIL")
-    vars["SACRED_USER"] = os.getenv("SACRED_USER")
-    vars["SACRED_PWD"] = os.getenv("SACRED_PWD")
+# def get_config_var():
+#     load_dotenv()
+#     vars = {}
+#     vars["SACRED_URL"] = os.getenv("SACRED_URL")
+#     vars["SACRED_DB"] = os.getenv("SACRED_DB")
+#     vars["VISDOM_PORT"] = os.getenv("VISDOM_PORT")
+#     vars["SAVE_DIR"] = os.getenv("SAVE_DIR")
+#     vars["GMAIL_USER"] = os.getenv("GMAIL_USER")
+#     vars["GMAIL_PASSWORD"] = os.getenv("GMAIL_PASSWORD")
+#     vars["TO_EMAIL"] = os.getenv("TO_EMAIL")
+#     vars["SACRED_USER"] = os.getenv("SACRED_USER")
+#     vars["SACRED_PWD"] = os.getenv("SACRED_PWD")
+#
+#     if not os.path.exists(vars["SAVE_DIR"]):
+#         os.makedirs(vars["SAVE_DIR"])
+#
+#     return vars
 
-    if not os.path.exists(vars["SAVE_DIR"]):
-        os.makedirs(vars["SAVE_DIR"])
+all_save_dir = Path("/home/hossein/Desktop")
 
-    return vars
-
-all_envs =  get_config_var()
-all_save_dir = all_envs["SAVE_DIR"]
-
-def send_email(_run, result, hostname):
-    if "GMAIL_PASSWORD" in all_envs:
-        server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-        server.ehlo()
-        server.login(all_envs["GMAIL_USER"], all_envs["GMAIL_PASSWORD"])
-        SUBJECT = "[EXP] Experiment {}:{} has finished with: {} Accuracy".format(_run._id, _run.experiment_info['name'],  result)
-        TEXT = "Your experiment on {} has finished.\nCheers,\n".format(hostname)
-        try:
-            TEXT2 = json.dumps(_run.config, indent=1)
-            TEXT += TEXT + TEXT2
-        except:
-            TEXT += "Json dumps for email did not work !"
-            pass
-        message = """From: %s\nTo: %s\nSubject: %s\n\n%s""" % (all_envs["GMAIL_USER"], all_envs["TO_EMAIL"], SUBJECT, TEXT)
-        server.sendmail(all_envs["GMAIL_USER"], all_envs["TO_EMAIL"] , message)
-        server.close()
+# def send_email(_run, result, hostname):
+#     if "GMAIL_PASSWORD" in all_envs:
+#         server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+#         server.ehlo()
+#         server.login(all_envs["GMAIL_USER"], all_envs["GMAIL_PASSWORD"])
+#         SUBJECT = "[EXP] Experiment {}:{} has finished with: {} Accuracy".format(_run._id, _run.experiment_info['name'],  result)
+#         TEXT = "Your experiment on {} has finished.\nCheers,\n".format(hostname)
+#         try:
+#             TEXT2 = json.dumps(_run.config, indent=1)
+#             TEXT += TEXT + TEXT2
+#         except:
+#             TEXT += "Json dumps for email did not work !"
+#             pass
+#         message = """From: %s\nTo: %s\nSubject: %s\n\n%s""" % (all_envs["GMAIL_USER"], all_envs["TO_EMAIL"], SUBJECT, TEXT)
+#         server.sendmail(all_envs["GMAIL_USER"], all_envs["TO_EMAIL"] , message)
+#         server.close()
 
 class LoggerForSacred():
     def __init__(self, visdom_logger, ex_logger=None, always_print=True):

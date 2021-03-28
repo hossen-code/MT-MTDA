@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -11,26 +13,26 @@ import cmodels.DANN_GRL as DANN_GRL
 import cmodels.DAN_model as DAN_model
 import cmodels.LeNet as LeNet
 import cmodels.BTDA_Alexnet_Office31 as BTDA_Alexnet
-from utils import eval, LoggerForSacred, adjust_learning_rate, get_config_var
+from utils import eval, LoggerForSacred, adjust_learning_rate
 import DA.mmd as mmd
-from utils import LoggerForSacred, send_email, get_sub_dataset_name
+from utils import LoggerForSacred, get_sub_dataset_name
 
 
 def main():
+    my_path = Path("/home/hossein/Desktop/dataset/mtda")
+    a = my_path / "domain_adaptation_images/amazon/images"
+    w = my_path / "domain_adaptation_images/webcam/images"
+    d = my_path / "domain_adaptation_images/dslr/images"
 
-    a = os.path.expanduser('~/datasets/amazon/images')
-    w = os.path.expanduser('~/datasets/webcam/images')
-    d = os.path.expanduser('~/datasets/dslr/images')
+    Ar = my_path / "OfficeHomeDataseat_10072016/Art"
+    Cl = my_path / "OfficeHomeDataseat_10072016/Clipart"
+    Pr = my_path / "OfficeHomeDataseat_10072016/Product"
+    Rw = my_path / "OfficeHomeDataseat_10072016/RealWorld"
 
-    Ar = os.path.expanduser('~/datasets/OfficeHome/Art')
-    Cl = os.path.expanduser('~/datasets/OfficeHome/Clipart')
-    Pr = os.path.expanduser('~/datasets/OfficeHome/Product')
-    Rw = os.path.expanduser('~/datasets/OfficeHome/RealWorld')
-
-    i = os.path.expanduser('~/datasets/image-clef/i')
-    p = os.path.expanduser('~/datasets/image-clef/p')
-    c = os.path.expanduser('~/datasets/image-clef/c')
-    is_debug = False
+    # i = os.path.expanduser('~/datasets/image-clef/i')
+    # p = os.path.expanduser('~/datasets/image-clef/p')
+    # c = os.path.expanduser('~/datasets/image-clef/c')
+    # is_debug = False
 
     batch_size = 16
     device = torch.device("cuda")

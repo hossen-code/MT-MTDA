@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -7,9 +9,9 @@ import os
 import DA.DA_datasets as DA_datasets
 import cmodels.ResNet as ResNet
 import cmodels.DAN_model as DAN_model
-from utils import eval, LoggerForSacred, adjust_learning_rate, get_config_var
+from utils import eval, LoggerForSacred, adjust_learning_rate
 
-save_dir = get_config_var()["SAVE_DIR"]
+save_dir = Path("/home/hossein/Desktop/saving_dir")
 
 def grl_multi_target_hinton_train_alt(current_ep, epochs, teacher_models, student_model, optimizer_das, optimizer_kd, device,
                          source_dataloader, targets_dataloader, T, alpha, beta, gamma, batch_norm, is_cst, is_debug=False,  **kwargs):
